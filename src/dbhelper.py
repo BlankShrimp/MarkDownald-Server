@@ -3,7 +3,7 @@ import MySQLdb
 conn = MySQLdb.connect(host='localhost', user='hdk', passwd='sbhdk', db='winmd')
 
 
-def registry(userid, nickname, passwd):
+def registry(userid, passwd, nickname):
     cursor = conn.cursor()
     cursor.execute("select userid from users where (userid='%s');" %(userid))
     row = cursor.fetchone()
@@ -14,7 +14,7 @@ def registry(userid, nickname, passwd):
         cursor.execute("insert into users values ('%s', '%s', '%s');" %(userid, nickname, passwd))
         cursor.close()
         conn.commit()
-        return 0
+        return "OK"
 
 
 def examine_user(userid, passwd):
@@ -30,12 +30,12 @@ def examine_user(userid, passwd):
             return "WRONG-PASSWD"
         else:
             cursor.close()
-            return 0
+            return "OK"
 
 
 def insert_note(userid, passwd, noteid, title, folderid, value):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
@@ -46,24 +46,24 @@ def insert_note(userid, passwd, noteid, title, folderid, value):
             return "EXISTED-NOTE"
         cursor.close()
         conn.commit()
-        return 0
+        return "OK"
 
 
 def delete_note(userid, passwd, noteid):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
         cursor.execute("delete from notes WHERE userid = '%s' AND noteid = %s" % (userid, noteid))
         cursor.close()
         conn.commit()
-        return 0
+        return "OK"
 
 
 def select_single_note(userid, passwd, noteid):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
@@ -78,7 +78,7 @@ def select_single_note(userid, passwd, noteid):
 
 def update_note(userid, passwd, noteid, title, folderid, value):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         if select_single_note(userid, passwd, noteid) == "MISSING-NOTE":
@@ -90,12 +90,12 @@ def update_note(userid, passwd, noteid, title, folderid, value):
                            % (title, folderid, value, noteid, userid))
             cursor.close()
             conn.commit()
-            return 0
+            return "OK"
 
 
 def insert_folder(userid, passwd, folderid, foldername, parentid):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
@@ -106,36 +106,36 @@ def insert_folder(userid, passwd, folderid, foldername, parentid):
             return "EXISTED-FOLDER"
         cursor.close()
         conn.commit()
-        return 0
+        return "OK"
 
 
 def delete_folder(userid, passwd, folderid):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
         cursor.execute("delete from folders WHERE userid = '%s' AND folderid = %s" % (userid, folderid))
         cursor.close()
         conn.commit()
-        return 0
+        return "OK"
 
 
 def select_single_folder(userid, passwd, folderid):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
         cursor.execute("delete from folders WHERE userid = '%s' AND folderid = %s" % (userid, folderid))
         cursor.close()
         conn.commit()
-        return 0
+        return "OK"
 
 
 def update_folder(userid, passwd, folderid, foldername, parentid):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         if select_single_folder(userid, passwd, folderid) == "MISSING-FOLDER":
@@ -147,12 +147,12 @@ def update_folder(userid, passwd, folderid, foldername, parentid):
                            % (foldername, parentid, folderid, userid))
             cursor.close()
             conn.commit()
-            return 0
+            return "OK"
 
 
 def select_all_notes(userid, passwd):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()
@@ -165,7 +165,7 @@ def select_all_notes(userid, passwd):
 
 def select_all_folders(userid, passwd):
     vali_result = examine_user(userid, passwd)
-    if vali_result:
+    if vali_result != "OK":
         return vali_result
     else:
         cursor = conn.cursor()

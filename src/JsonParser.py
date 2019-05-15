@@ -1,5 +1,4 @@
 import json
-import DBHelper
 
 
 def dump_single_note(input):
@@ -11,7 +10,7 @@ def dump_single_note(input):
         'userid' : input[4],
         'cdate' : input[5]
     }]
-    return json.dump(obj)
+    return json.dumps(obj)
 
 
 def dump_all_notes(input):
@@ -26,7 +25,7 @@ def dump_all_notes(input):
             'cdate' : row[5]
         }]
         obj.append(temp)
-    return json.dump(obj)
+    return json.dumps(obj)
 
 
 def dump_all_folder(input):
@@ -39,4 +38,4 @@ def dump_all_folder(input):
             'parentid' : int(row[2]),
         }]
         obj.append(temp)
-    return json.dump(obj)
+    return json.dumps(obj)
